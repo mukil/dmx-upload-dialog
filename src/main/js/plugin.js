@@ -1,8 +1,15 @@
-export default ({store, dm5, axios: http, Vue}) => ({
+export default () => ({
+
+  extraElementUI: true,
 
   components: [{
     comp: require('./components/Upload-Dialog').default,
     mount: 'toolbar-left'
-  }]
+  }],
+
+  storeModule: {
+    name: 'upload',
+    module: require('./upload-dialog-store').default
+  }
 
 })

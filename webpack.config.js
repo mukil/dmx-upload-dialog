@@ -36,7 +36,11 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new MiniCssExtractPlugin({
+      filename: '[contenthash].style.css',
+      chunkFilename: '[chunkhash].[name].css',
+    })
   ],
   stats: {
     entrypoints: false
