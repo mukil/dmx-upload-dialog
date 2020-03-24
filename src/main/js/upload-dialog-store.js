@@ -4,16 +4,15 @@ const state = {
 
 const actions = {
 
-  registerUploadHandler({store}, {props}) {
-    console.log("[Upload Dialog] Registering Upload Handler", props, store)
-    // var obj = {props: props, selected: selected, success: success, error: error}
-    /** if (state.handler.hasOwnProperty(props.mimeType)) {
-      console.log("appending handler for mimeType", props.mimeType, "list => ", state.handler)
-      state.handler[props.mimeType].push(props)
+  registerUploadHandler({state}, handler) {
+    console.log("[Upload Dialog] Registering Upload Handler", handler, state)
+    if (state.handler.hasOwnProperty(handler.mimeType)) {
+      console.log("[Upload Dialog] Appending handler for mimeType", handler.mimeType, "list => ", state.handler)
+      state.handler[handler.mimeType].push(handler)
     } else {
-      state.handler[props.mimeType] = [props]
-      console.log("init handler for mimeType", props.mimeType, "list =>", state.handler)
-    } **/
+      state.handler[handler.mimeType] = [handler]
+      console.log("[Upload Dialog] Init handler for mimeType", handler.mimeType, "list =>", state.handler)
+    }
   }
 
 }
