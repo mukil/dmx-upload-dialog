@@ -1,5 +1,6 @@
 const state = {
-  handler: {}
+  handler: {},
+  uploadDialogVisible: false
 }
 
 const actions = {
@@ -13,6 +14,12 @@ const actions = {
       state.handler[handler.mimeType] = [handler]
       console.log("[Upload Dialog] Init handler for mimeType, (resp. fileEnding)", handler.mimeType, "list =>", state.handler)
     }
+  },
+  openUploadDialog() {
+    state.uploadDialogVisible = true
+  },
+  closeUploadDialog() {
+    state.uploadDialogVisible = false
   }
 
 }

@@ -4,7 +4,7 @@
     <div v-if="uploadDialogVisible" class="dm5-upload-dialog">
         <el-upload class="manual-upload"
             ref="upload" :action="uploadPath"
-            with-credentials
+            with-credentials multiple
             :on-change="selectionHandler"
             :on-error="errorHandler"
             :on-success="successHandler"
@@ -32,7 +32,6 @@ export default {
 
   data() {
     return {
-        uploadDialogVisible: false,
         uploadPath: "/files/%2F",
         errorHandler: this.uploadError,
         selectionHandler: this.uploadChanged,
@@ -45,17 +44,28 @@ export default {
   computed: {
     handler: function () {
       return this.$store.state.upload.handler
+    },
+    uploadDialogVisible: function() {
+      return this.$store.state.upload.uploadDialogVisible
     }
   },
 
   methods: {
     uploadSuccess(response, file, fileList) {
-      this.uploadDialogVisible = false
+      console.log("[Upload Dialog] file upload succesfull", response)
+      this.closeUploadDialog()
       this.$refs.upload.clearFiles()
       this.$store.dispatch("revealTopicById", response.topicId)
+      this.$notify({
+        title: 'File Uploaded', type: 'success'
+      })
     },
     uploadError(err, file, fileList) {
       console.warn("upload failed", err, file, fileList)
+      this.$notify.error({
+        title: 'Upload Failed',
+        message: "Error \"" + JSON.stringify(err) + "\""
+      })
     },
     uploadChanged(file, fileList) {
       console.log("[Upload Dialog] file selected for upload", file.raw)
@@ -82,10 +92,10 @@ export default {
         // ### Todo: once a file was selected, subsequent files must have same file ending
     },
     openUploadDialog() {
-      this.uploadDialogVisible = true
+      this.$store.dispatch("openUploadDialog")
     },
     closeUploadDialog() {
-      this.uploadDialogVisible = false
+      this.$store.dispatch("closeUploadDialog")
     },
     submitUpload() {
       this.$refs.upload.submit()
