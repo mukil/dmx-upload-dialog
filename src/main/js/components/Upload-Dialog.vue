@@ -37,7 +37,8 @@ export default {
         selectionHandler: this.uploadChanged,
         successHandler: this.uploadSuccess,
         fileNameEnding: "",
-        fileListType: "text"
+        fileListType: "text",
+        availableFileTypes: []
     }
   },
 
@@ -51,6 +52,7 @@ export default {
   },
 
   methods: {
+
     uploadSuccess(response, file, fileList) {
       console.log("[Upload Dialog] file upload succesfull", response)
       this.closeUploadDialog()
@@ -60,6 +62,7 @@ export default {
         title: 'File Uploaded', type: 'success'
       })
     },
+
     uploadError(err, file, fileList) {
       console.warn("upload failed", err, file, fileList)
       this.$notify.error({
@@ -67,39 +70,55 @@ export default {
         message: "Error \"" + JSON.stringify(err) + "\""
       })
     },
+
     uploadChanged(file, fileList) {
-      console.log("[Upload Dialog] file selected for upload", file.raw)
-      let fileNameEnding = file.name.slice(file.name.lastIndexOf(".") + 1).toUpperCase()
-      let available = this.handler[file.raw.type.split("/")]
-      if (typeof available === "undefined") {
-        console.log("[Upload Dialog] no custom file upload handler registered for mimeType, checking for fileNameEnding...")
-        available = this.handler[fileNameEnding]
-        if (typeof available === "undefined") {
-            console.log("[Upload Dialog] Using standard upload handler, uploading to root directory of filerepository")
+      var available = undefined
+      for (const i in this.handler) {
+        if (!this.handler[i].hasOwnProperty("mimeTypes")) console.warn("Upload handler object has no mimeTypes attribute set")
+        handlerSearch:
+        for (const m in this.handler[i].mimeTypes) {
+            if (this.handler[i].mimeTypes[m] === file.raw.type.toLowerCase()) {
+                console.log("[Upload Dialog] Using custom handler", this.handler[i].mimeTypes)
+                available = this.handler[i]
+                break handlerSearch
+            }
         }
       }
-      // ...
+      // Set Custom Handler Active
       if (typeof available !== "undefined") {
-        console.log("[Upload Dialog] Hooking in custom file upload handler", available)
-        console.log("[Upload Dialog] Trying to register custom handler...")
-        this.errorHandler = available[0].error
-        this.successHandler = available[0].success
-        this.selectionHandler = available[0].selected
-        this.uploadPath = available[0].action
+        this.errorHandler = available.error
+        this.successHandler = available.success
+        // call selected handler to react
+        available.selected()
+        this.uploadPath = available.action
+        this.availableFileTypes = available.mimeTypes
+      } else {
+        console.log("[Upload Dialog] no custom file upload handler registered for mimeType (" + file.raw.type + ")")
       }
     },
+
     beforeUpload(file) {
-        // ### Todo: once a file was selected, subsequent files must have same file ending
+        if (this.availableFileTypes.length > 0) {
+            console.log("Upload check for all files", this.availableFileTypes, "fileType", file.type)
+            const isCorrectFollowupFile = (typeof this.availableFileTypes[file.type] !== "undefined") ? true : false
+            if (!isCorrectFollowupFile) {
+              this.$notify.error("For this upload, all files must be of type " + JSON.stringify(this.availableFileTypes));
+            }
+        }
     },
+
     openUploadDialog() {
       this.$store.dispatch("openUploadDialog")
     },
+
     closeUploadDialog() {
       this.$store.dispatch("closeUploadDialog")
     },
+
     submitUpload() {
       this.$refs.upload.submit()
     }
+
   }
 }
 </script>
