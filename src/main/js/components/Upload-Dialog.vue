@@ -1,30 +1,42 @@
 <template>
-  <div class="dm5-upload-command">
-    <el-button type="text" class="fa fa-upload" title="Upload File to DMX" @click="openUploadDialog"></el-button>
-    <div v-if="uploadDialogVisible" class="dm5-upload-dialog">
-        <el-upload class="manual-upload"
-            ref="upload" :action="uploadPath"
-            with-credentials multiple
-            :on-change="selectionHandler"
-            :on-error="errorHandler"
-            :on-success="successHandler"
-            :before-upload="beforeUpload"
-            :auto-upload="false" :list-type="fileListType">
-            <!--div slot="file" slot-scope="{file}">
-              <span>{{file.name}}</span>
-              <span class="el-upload-list__item-actions">
-                <span class="el-upload-list__item-delete" @click="handleRemove(file)">
-                  <i class="el-icon-delete"></i>
-                </span>
-              </span>
-            </div-->
-            <el-button slot="trigger" size="small" type="primary">Select file</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload to server</el-button>
-            <el-button size="small" type="danger" @click="closeUploadDialog">Cancel</el-button>
-            <div class="el-upload__tip" slot="tip"><!-- Todo: Let other plugins hook in their component here --></div>
-        </el-upload>
+    <div class="dm5-upload-command">
+        <el-button type="text" class="fa fa-upload" v-if="commandVisible" title="Upload File to DMX" @click="openUploadDialog"></el-button>
+
+        <div v-if="uploadDialogVisible" class="dm5-upload-dialog">
+            <el-upload class="manual-upload"
+                ref="upload" :action="uploadPath"
+                with-credentials multiple
+                :on-change="selectionHandler"
+                :on-error="errorHandler"
+                :on-success="successHandler"
+                :before-upload="beforeUpload"
+                :auto-upload="false" :list-type="fileListType">
+                <!--div slot="file" slot-scope="{file}">
+                  <span>{{file.name}}</span>
+                  <span class="el-upload-list__item-actions">
+                    <span class="el-upload-list__item-delete" @click="handleRemove(file)">
+                      <i class="el-icon-delete"></i>
+                    </span>
+                  </span>
+                </div-->
+
+                <el-button slot="trigger" size="small" type="primary">Select file</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload to server</el-button>
+                <el-button size="small" type="danger" @click="closeUploadDialog">Cancel</el-button>
+
+                <div v-if="uploadOptions" class="el-upload__tip" slot="tip">
+                  <h3>{{uploadOptionsMessage}}</h3>
+                  <!-- el-radio v-model="uploadOption" label="none" border size="small">None</el-radio-->
+                  <el-radio @change="updateUploadAction" v-for="option in uploadOptions"
+                    v-model="uploadOption" :label="option.value" border size="small" :key="option.value">
+                    {{option.label}}
+                  </el-radio>
+                </div>
+
+            </el-upload>
+        </div>
+
     </div>
-  </div>
 </template>
 
 <script>
@@ -38,7 +50,8 @@ export default {
         successHandler: this.uploadSuccess,
         fileNameEnding: "",
         fileListType: "text",
-        availableFileTypes: []
+        availableFileTypes: [],
+        uploadOption: undefined
     }
   },
 
@@ -46,8 +59,17 @@ export default {
     handler: function () {
       return this.$store.state.upload.handler
     },
+    uploadOptions: function () {
+      return this.$store.state.upload.options
+    },
+    uploadOptionsMessage: function () {
+      return this.$store.state.upload.optionsMessage
+    },
     uploadDialogVisible: function() {
       return this.$store.state.upload.uploadDialogVisible
+    },
+    commandVisible: function() {
+      return (this.$store.state.accesscontrol.username)
     }
   },
 
@@ -89,7 +111,7 @@ export default {
         this.errorHandler = available.error
         this.successHandler = available.success
         // call selected handler to react
-        available.selected()
+        available.selected(file) // mutates state.upload.optons
         this.uploadPath = available.action
         this.availableFileTypes = available.mimeTypes
       } else {
@@ -97,12 +119,16 @@ export default {
       }
     },
 
-    beforeUpload(file) {
-        if (this.availableFileTypes.length > 0) {
-            console.log("Upload check for all files", this.availableFileTypes, "fileType", file.type)
-            const isCorrectFollowupFile = (typeof this.availableFileTypes[file.type] !== "undefined") ? true : false
-            if (!isCorrectFollowupFile) {
-              this.$notify.error("For this upload, all files must be of type " + JSON.stringify(this.availableFileTypes));
+    updateUploadAction() {
+        // console.log("[Upload Dialog] beforeUpload", this.uploadOption, this.uploadOptions)
+        /** if (this.uploadOption === "none") {
+            // set to standard uploadPath of current custom handler
+        }**/
+        for (let u in this.uploadOptions) {
+            if (this.uploadOptions[u].value === this.uploadOption) {
+                // update form action accordingly
+                this.uploadPath = this.uploadOptions[u].action
+                console.log("[Upload Dialog] Adapted upload endpoint according to user input", this.uploadPath)
             }
         }
     },
@@ -113,6 +139,7 @@ export default {
 
     closeUploadDialog() {
       this.$store.dispatch("closeUploadDialog")
+      this.uploadOption = undefined
     },
 
     submitUpload() {

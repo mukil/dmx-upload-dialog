@@ -1,6 +1,8 @@
 const state = {
   handler: [],
-  uploadDialogVisible: false
+  uploadDialogVisible: false,
+  options: undefined,
+  optionsMessage: undefined
 }
 
 const actions = {
@@ -9,11 +11,17 @@ const actions = {
     console.log("[Upload Dialog] Registering Dialog Handler", handler, state)
     state.handler.push(handler)
   },
+  setUploadDialogOptions({state}, options) {
+    state.options = options.options
+    state.optionsMessage = options.optionsMessage
+  },
   openUploadDialog() {
     state.uploadDialogVisible = true
   },
   closeUploadDialog() {
     state.uploadDialogVisible = false
+    state.upload.options = undefined
+    state.upload.optionsMessage = undefined
   }
 
 }
