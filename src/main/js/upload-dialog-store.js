@@ -20,8 +20,8 @@ const actions = {
   },
   closeUploadDialog() {
     state.uploadDialogVisible = false
-    state.upload.options = undefined
-    state.upload.optionsMessage = undefined
+    state.options = undefined
+    state.optionsMessage = undefined
   }
 
 }
