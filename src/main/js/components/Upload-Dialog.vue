@@ -5,11 +5,10 @@
         <div v-if="uploadDialogVisible" class="dm5-upload-dialog">
             <el-upload class="manual-upload"
                 ref="upload" :action="uploadPath"
-                with-credentials multiple
+                with-credentials
                 :on-change="selectionHandler"
                 :on-error="errorHandler"
                 :on-success="successHandler"
-                :before-upload="beforeUpload"
                 :auto-upload="false" :list-type="fileListType">
                 <!--div slot="file" slot-scope="{file}">
                   <span>{{file.name}}</span>
@@ -24,7 +23,7 @@
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload to server</el-button>
                 <el-button size="small" type="danger" @click="closeUploadDialog">Cancel</el-button>
 
-                <div v-if="uploadOptions" class="el-upload__tip" slot="tip">
+                <div v-if="uploadOptionsAvailable" class="el-upload__tip" slot="tip">
                   <h3>{{uploadOptionsMessage}}</h3>
                   <!-- el-radio v-model="uploadOption" label="none" border size="small">None</el-radio-->
                   <el-radio @change="updateUploadAction" v-for="option in uploadOptions"
@@ -59,6 +58,9 @@ export default {
     handler: function () {
       return this.$store.state.upload.handler
     },
+    uploadOptionsAvailable: function () {
+      return (typeof this.$store.state.upload.options !== "undefined")
+    },
     uploadOptions: function () {
       return this.$store.state.upload.options
     },
@@ -78,7 +80,6 @@ export default {
     uploadSuccess(response, file, fileList) {
       console.log("[Upload Dialog] file upload succesfull", response)
       this.closeUploadDialog()
-      this.$refs.upload.clearFiles()
       this.$store.dispatch("revealTopicById", response.topicId)
       this.$notify({
         title: 'File Uploaded', type: 'success'
@@ -86,7 +87,7 @@ export default {
     },
 
     uploadError(err, file, fileList) {
-      console.warn("upload failed", err, file, fileList)
+      console.warn("[Upload Dialog] upload failed", err, file, fileList)
       this.$notify.error({
         title: 'Upload Failed',
         message: "Error \"" + JSON.stringify(err) + "\""
@@ -110,8 +111,8 @@ export default {
       if (typeof available !== "undefined") {
         this.errorHandler = available.error
         this.successHandler = available.success
-        // call selected handler to react
-        available.selected(file) // mutates state.upload.optons
+        // call registered file selection handler once here
+        available.selected(file) // to mutate dialog state.upload.optons
         this.uploadPath = available.action
         this.availableFileTypes = available.mimeTypes
       } else {
@@ -140,6 +141,7 @@ export default {
     closeUploadDialog() {
       this.$store.dispatch("closeUploadDialog")
       this.uploadOption = undefined
+      this.$refs.upload.clearFiles()
     },
 
     submitUpload() {

@@ -18,7 +18,7 @@ const actions = {
   openUploadDialog() {
     state.uploadDialogVisible = true
   },
-  closeUploadDialog() {
+  closeUploadDialog({state}) {
     state.uploadDialogVisible = false
     state.options = undefined
     state.optionsMessage = undefined
