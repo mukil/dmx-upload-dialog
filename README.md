@@ -28,6 +28,10 @@ store.dispatch("registerUploadHandler", {
 
 ## Version History
 
+**1.0.1** - Upcoming
+
+* Browser console output line during handler registration less verbose
+
 **1.0.0** - Apr 28, 2020
 
 * Single file upload into root folder of filerepo functional
