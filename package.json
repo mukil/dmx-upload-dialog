@@ -1,6 +1,6 @@
 {
   "name": "dmx-upload-dialog",
-  "version": "1.0.1-SNAPSHOT",
+  "version": "1.0.1",
   "description": "Extendible upload dialog for DMX Webclient",
   "author": "Malte Reißig <malte@mikromedia.de>",
   "license": "AGPL-3.0",

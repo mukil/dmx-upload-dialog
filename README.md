@@ -28,7 +28,7 @@ store.dispatch("registerUploadHandler", {
 
 ## Version History
 
-**1.0.1** - Upcoming
+**1.0.1** - Aug 15, 2020
 
 * Browser console output line during handler registration less verbose
 
