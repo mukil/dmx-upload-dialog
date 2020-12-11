@@ -1,9 +1,9 @@
-dmx-db/
-images/
-runner/
 target/
+node_modules/
 .classpath
 .idea
 .project
 .settings
 *.iml
+/src/main/resources/web/
+commit-message.txt
