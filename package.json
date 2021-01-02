@@ -1,6 +1,6 @@
 {
   "name": "dmx-upload-dialog",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Extendible upload dialog for DMX Webclient",
   "author": "Malte Reißig <malte@mikromedia.de>",
   "license": "AGPL-3.0",
@@ -22,7 +22,7 @@
     "style-loader": "^0.23.1",
     "mini-css-extract-plugin": "^0.5.0",
     "vue-loader": "^15.5.0",
-    "vue-template-compiler": "^2.5.21",
+    "vue-template-compiler": "2.6.11",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11"
   }

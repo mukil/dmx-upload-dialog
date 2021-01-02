@@ -1,4 +1,4 @@
-export default ({dm5, axios}) => ({
+export default ({dmx, axios}) => ({
 
   extraElementUI: true,
 
@@ -18,7 +18,7 @@ export default ({dm5, axios}) => ({
         return [{
           label: '<i title="Download File" class="fa fa-download"></i>',
           handler: id => {
-            dm5.restClient.getTopic(id, true)
+            dmx.rpc.getTopic(id, true)
               .then(function(response) {
                 let filePath = response.children['dmx.files.path'].value
                 window.document.location.assign('/filerepo/' + encodeURIComponent(filePath) + '?download')

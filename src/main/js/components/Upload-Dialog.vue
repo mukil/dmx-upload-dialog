@@ -78,7 +78,7 @@ export default {
   methods: {
 
     uploadSuccess(response, file, fileList) {
-      console.log("[Upload Dialog] file upload succesfull", response)
+      console.debug("[Upload Dialog] file upload succesfull", response)
       this.closeUploadDialog()
       this.$store.dispatch("revealTopicById", response.topicId)
       this.$notify({
@@ -101,7 +101,7 @@ export default {
         handlerSearch:
         for (const m in this.handler[i].mimeTypes) {
             if (this.handler[i].mimeTypes[m] === file.raw.type.toLowerCase()) {
-                console.log("[Upload Dialog] Using custom handler", this.handler[i].mimeTypes)
+                console.debug("[Upload Dialog] Using custom handler", this.handler[i].mimeTypes)
                 available = this.handler[i]
                 break handlerSearch
             }
@@ -121,7 +121,7 @@ export default {
     },
 
     updateUploadAction() {
-        // console.log("[Upload Dialog] beforeUpload", this.uploadOption, this.uploadOptions)
+        // console.debug("[Upload Dialog] beforeUpload", this.uploadOption, this.uploadOptions)
         /** if (this.uploadOption === "none") {
             // set to standard uploadPath of current custom handler
         }**/
@@ -129,7 +129,7 @@ export default {
             if (this.uploadOptions[u].value === this.uploadOption) {
                 // update form action accordingly
                 this.uploadPath = this.uploadOptions[u].action
-                console.log("[Upload Dialog] Adapted upload endpoint according to user input", this.uploadPath)
+                console.debug("[Upload Dialog] Adapted upload endpoint according to user input", this.uploadPath)
             }
         }
     },

@@ -8,7 +8,7 @@ const state = {
 const actions = {
 
   registerUploadHandler({state}, handler) {
-    console.log("[Upload Dialog] Registering Dialog Handler", handler)
+    console.debug("[Upload Dialog] Registering Dialog Handler", handler)
     state.handler.push(handler)
   },
   setUploadDialogOptions({state}, options) {
