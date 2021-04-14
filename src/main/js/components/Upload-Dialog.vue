@@ -43,7 +43,7 @@ export default {
 
   data() {
     return {
-        uploadPath: "/files/%2F",
+        uploadPath: "/upload/%2F",
         errorHandler: this.uploadError,
         selectionHandler: this.uploadChanged,
         successHandler: this.uploadSuccess,
@@ -80,7 +80,7 @@ export default {
     uploadSuccess(response, file, fileList) {
       console.debug("[Upload Dialog] file upload succesfull", response)
       this.closeUploadDialog()
-      this.$store.dispatch("revealTopicById", response.topicId)
+      this.$store.dispatch("revealTopicById", response.topicId, {root: true})
       this.$notify({
         title: 'File Uploaded', type: 'success'
       })
@@ -135,11 +135,11 @@ export default {
     },
 
     openUploadDialog() {
-      this.$store.dispatch("openUploadDialog")
+      this.$store.dispatch("upload/openUploadDialog")
     },
 
     closeUploadDialog() {
-      this.$store.dispatch("closeUploadDialog")
+      this.$store.dispatch("upload/closeUploadDialog")
       this.uploadOption = undefined
       this.$refs.upload.clearFiles()
     },
