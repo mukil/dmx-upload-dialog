@@ -1,7 +1,5 @@
 export default ({dmx, axios}) => ({
 
-  extraElementUI: true,
-
   components: [{
     comp: require('./components/Upload-Dialog').default,
     mount: 'toolbar-left'

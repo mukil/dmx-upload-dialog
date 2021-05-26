@@ -159,5 +159,6 @@ export default {
     border: 1px dashed #ccc;
     border-radius: .5em;
     position: absolute;
+    top: 2.5em;
 }
 </style>
