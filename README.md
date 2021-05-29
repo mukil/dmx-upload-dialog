@@ -1,16 +1,16 @@
 
 # DMX Upload Dialog
 
-A vue component to extend the [DMX](https://git.dmx.systems/dmx-platform/dmx-platform) webclient about a single file upload dialog.
+A vue component to extend the [DMX](https://git.dmx.systems/dmx-platform/dmx-platform) webclient about an extensible single-file upload dialog.
 
 Additionally adds a `Download` command into the context commands of each _File_ topic.
 
 ## Usage
 
-DMX Plugins can call `registerUploadHandlers` like for e.g. the dmx-import-export plugin does [here](https://git.dmx.systems/dmx-plugins/dmx-import-export/-/blob/master/src/main/js/plugin.js#L6) or the dmx-csv plugin does [here](https://github.com/mukil/dmx-csv/blob/master/src/main/js/plugin.js).
+DMX Plugins can call `upload/registerUploadHandlers` like for e.g. the dmx-import-export plugin does [here](https://git.dmx.systems/dmx-plugins/dmx-import-export/-/blob/master/src/main/js/plugin.js#L6) or the dmx-csv plugin does [here](https://github.com/mukil/dmx-csv/blob/master/src/main/js/plugin.js).
 
 ```
-store.dispatch("registerUploadHandler", {
+store.dispatch("upload/registerUploadHandler", {
   mimeTypes:  ["application/vnd.ms-excel", "text/csv"], // 1. Win 10 FFox CSV 2. Other CSV
   action: "/csv/import",
   selected: function(file, fileList) {
@@ -26,7 +26,28 @@ store.dispatch("registerUploadHandler", {
 })
 ```
 
+Plugin can additionally call `upload/setUploadDialogOptions` like, for example, the dmx-import-export plugin.
+
+```
+store.dispatch("upload/setUploadDialogOptions", {
+  options: [
+    {value: "topicmap", label: "DMX Topicmap", action: "/import-export/import/topicmap"},
+    {value: "firefox", label: "Firefox Bookmarks", action: "/import-export/import/bookmarks/firefox"}
+  ],
+  optionsMessage: "What is the content you want to import?"
+})
+```
+
 ## Version History
+
+**1.0.3** - Upcoming
+
+* Maintenance release compatible with DMX 5.2
+* Namespaced store module ("upload")
+
+**1.0.2** - Jan 2, 2021
+
+* Maintenance release compatible with DMX 5.1
 
 **1.0.1** - Aug 15, 2020
 
@@ -41,4 +62,4 @@ store.dispatch("registerUploadHandler", {
 
 ### Authors
 
-(C) Malte Reißig 2020
+(C) Malte Reißig 2021
