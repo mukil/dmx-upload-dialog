@@ -26,7 +26,7 @@ store.dispatch("upload/registerUploadHandler", {
 })
 ```
 
-Plugin can additionally call `upload/setUploadDialogOptions` like, for example, the dmx-import-export plugin.
+DMX Plugins can additionally call `upload/setUploadDialogOptions` like, for example, the dmx-import-export plugin to allow users to upload the file to a custom resource.
 
 ```
 store.dispatch("upload/setUploadDialogOptions", {
