@@ -5,6 +5,16 @@ A vue component to extend the [DMX](https://git.dmx.systems/dmx-platform/dmx-pla
 
 Additionally adds a `Download` command into the context commands of each _File_ topic.
 
+## Installation
+
+You can find the latest stable version of this plugin right here on [github.com/releases](https://github.com/mukil/dmx-upload-dialog/releases).
+
+You will also need to download and install the following plugin/s:
+
+- dmx-file-upload 1.0
+
+After downloading both plugins (.jar, bundle-files), place them in the `bundle-deploy` folder of your DMX installation and restart DMX.
+
 ## Usage
 
 DMX Plugins can call `upload/registerUploadHandlers` like for e.g. the dmx-import-export plugin does [here](https://git.dmx.systems/dmx-plugins/dmx-import-export/-/blob/master/src/main/js/plugin.js#L6) or the dmx-csv plugin does [here](https://github.com/mukil/dmx-csv/blob/master/src/main/js/plugin.js).
@@ -40,10 +50,11 @@ store.dispatch("upload/setUploadDialogOptions", {
 
 ## Version History
 
-**1.0.3** - Upcoming
+**1.0.3** - Jun 30, 2021
 
-* Maintenance release compatible with DMX 5.2
+* Adapted to be compatible with DMX 5.2
 * Namespaced store module ("upload")
+* New dependency: dmx-file-upload 1.0 plugin ([sources](https://git.dmx.systems/dmx-plugins/dmx-file-upload), [download](https://download.dmx.systems/ci/dmx-file-upload/))
 
 **1.0.2** - Jan 2, 2021
 
